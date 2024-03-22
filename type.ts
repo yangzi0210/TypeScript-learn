@@ -65,3 +65,86 @@ const cats: Record<CatName, Cat> = {
 type MyRecord<K extends keyof any, T> = {
   [P in K]: T;
 };
+
+interface Todo {
+  title: string;
+  description: string;
+  done: boolean;
+}
+
+type TodoPreview = Pick<Todo, "title" | "done">;
+
+const todo: TodoPreview = {
+  title: "play games",
+  done: false,
+};
+
+type MyPick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+
+type E0 = Exclude<"a" | "b", "a">;
+
+type E1 = Exclude<string | number | (() => void), Function>;
+
+type MyExclude<T, U> = T extends U ? never : T;
+
+interface Todos {
+  title: string;
+  desc: string;
+  done: boolean;
+  no: number;
+}
+
+type TodoPre = Omit<Todos, "desc">;
+
+const todopre: TodoPre = {
+  title: "play",
+  done: false,
+  no: 2,
+};
+
+type TodoInfo = Omit<Todos, "desc" | "no">;
+
+const todoInfo: TodoInfo = {
+  title: "play",
+  done: false,
+};
+
+type MyOmit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+
+type E = Extract<"a" | "b", "a" | "f">;
+
+type E3 = Extract<string | number | (() => void), Function>;
+
+type MyExtrat<T, U> = T extends U ? T : never;
+
+declare function f(args: { a: number; b: string }): void;
+
+type P0 = Parameters<() => string>; // []
+
+type P1 = Parameters<(s: string) => void>; // [s: string]
+
+type P2 = Parameters<<T>(arg: T) => T>; // [arg: unknown]
+
+type P3 = Parameters<typeof f>;
+
+type MyParameters<T extends (...args: any) => any> = T extends (
+  ...args: infer P
+) => any
+  ? P
+  : never;
+
+type R = ReturnType<() => void>;
+
+const add = (x: number, y: number): number => {
+  return x + y;
+};
+
+type R1 = MyReturnType<typeof add>;
+
+type MyReturnType<T extends (...args: any) => any> = T extends (
+  ...args: any
+) => infer R
+  ? R
+  : any;
